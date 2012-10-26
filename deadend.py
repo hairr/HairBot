@@ -1,4 +1,4 @@
-import mwhair, datetime, re
+import mwhair, time, datetime, re
 def getpages():
 	year, currentyear, monthname, returnlist = 2012, datetime.datetime.now().year, lambda month_num:datetime.date(1900,month_num,1).strftime('%B'), []
 	while 1:
@@ -26,6 +26,7 @@ def main():
 	pages = getpages()
 	for page in pages:
 		remove(page)
+		time.sleep(3)
 if __name__ == '__main__':
 	mwhair.site('http://en.wikipedia.org/w/api.php')
 	mwhair.login('HairBot','password')
