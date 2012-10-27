@@ -8,16 +8,18 @@ def getpages():
 				for page in pages: returnlist.append(page)
 		year += 1
 		if currentyear < year: return returnlist
+def allow_bots(text, user): # [[Template:Bots#Python]]
+    return not re.search(r'\{\{(nobots|bots\|(allow=none|deny=.*?' + user + r'.*?|optout=all|deny=all))\}\}', text, flags=re.IGNORECASE)
 def remove(title):
 		try: links = len(pagelinks(title))
 		except: links = 0
 		if links > 0:
 			text = mwhair.edit(title)
-			print title
-			newtext = re.sub(r'({{(D|d)ead end(\|(.*))?}}(\n)?|dead end ?=(\n)?|\| ?(d|D)ead end ?= ?([a-zA-Z0-9]+) ([a-zA-Z0-9]+))','',text)
-			newtext = re.sub(r'{{Multiple issues\|\s*{{(?P<template>[^\|]+)\|date=(?P<date>[^}]+)}}\s*}}',r'{{\g<template>\|date=\g<date>}}',newtext)
-			newtext = re.sub(r'{{Multiple issues\|\s*(?P<template>[^=]+) ?= ?(?P<date>[^\|}]+)}}',r'{{\g<template>|date=\g<date>}}',newtext)
-			save(title,newtext)
+			if allow_bots(text,'HairBot') == True:
+				newtext = re.sub(r'({{(D|d)ead end(\|(.*))?}}(\n)?|dead end ?=(\n)?|\| ?(d|D)ead end ?= ?([a-zA-Z0-9]+) ([a-zA-Z0-9]+))','',text)
+				newtext = re.sub(r'{{Multiple issues\|\s*{{(?P<template>[^\|]+)\|date=(?P<date>[^}]+)}}\s*}}',r'{{\g<template>\|date=\g<date>}}',newtext)
+				newtext = re.sub(r'{{Multiple issues\|\s*(?P<template>[^=]+) ?= ?(?P<date>[^\|}]+)}}',r'{{\g<template>|date=\g<date>}}',newtext)
+				save(title,newtext)
 def save(title,text):
 	mwhair.save(title,text=text,summary='Removing dead end tag as not a valid dead end page',minor=True)
 def pagelinks(title):
