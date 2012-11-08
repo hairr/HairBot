@@ -1,4 +1,7 @@
-import mwhair, time, datetime, re
+import mwhair
+import time
+import datetime
+import re
 def getpages():
 	year, currentyear, monthname, returnlist = 2012, datetime.datetime.now().year, lambda month_num:datetime.date(1900,month_num,1).strftime('%B'), []
 	while 1:
@@ -15,10 +18,12 @@ def remove(title):
 		except: links = 0
 		if links > 0:
 			text = mwhair.edit(title)
-			if allow_bots(text,'HairBot') == True:
+			if allow_bots(text,'HairBot'):
 				newtext = re.sub(r'({{(D|d)ead end(\|(.*))?}}(\n)?|dead end ?=(\n)?|\| ?(d|D)ead end ?= ?([a-zA-Z0-9]+) ([a-zA-Z0-9]+))','',text)
-				newtext = re.sub(r'{{(M|m)ultiple issues\|\s*{{(?P<template>[^\|]+)\|date=(?P<date>[^}]+)}}\s*}}',r'{{\g<template>\|date=\g<date>}}',newtext)
-				newtext = re.sub(r'{{(M|m)ultiple issues\|\s*(?P<template>[^=]+) ?= ?(?P<date>[^\|}]+)}}',r'{{\g<template>|date=\g<date>}}',newtext)
+				newtext = re.sub(r'{{Multiple issues\|\s*{{(?P<template>[^\|]+)\|date=(?P<date>[^}]+)}}\s*}}',r'{{\g<template>\|date=\g<date>}}',newtext)
+				newtext = re.sub(r'{{Multiple issues\|\s*(?P<template>[^=]+) ?= ?(?P<date>[^\|}]+)}}',r'{{\g<template>|date=\g<date>}}',newtext)
+				if links <= 3:
+					newtext = '{{subst:dated|Underlinked}}\n' + newtext
 				save(title,newtext)
 def save(title,text):
 	mwhair.save(title,text=text,summary='Removing dead end tag as not a valid dead end page',minor=True)
