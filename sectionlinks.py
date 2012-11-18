@@ -34,10 +34,11 @@ def find_links(text):
 	return links
 
 def page_name(link):
-	return str(mw.parse(link).filter_links()[0].title).split('#')[0]
+	return str(mw.parse(str(link)).filter_links()[0].title).split('#')[0]
 
 def section_link(link):
-	return str(mw.parse(link).filter_links()[0].title).split('#')[1]
+	print link
+	return str(mw.parse(str(link)).filter_links()[0].title).split('#')[1]
 
 def matched(section,headers):
 	count, total = 0, len(headers)
@@ -57,7 +58,7 @@ def replace_link(section, link, headers):
 			return re.sub('#' + section,'',link.encode('ascii','ignore'))
 
 def filter_headers(title):
-	title2 = str(mw.parse(title).filter_links()[0].title).split('#')[0]
+	title2 = page_name(title)
 	text, sections = get_contents(title2), []
 	beautiful_text = BS(text)
 	if beautiful_text.nowiki is not None:
@@ -93,7 +94,7 @@ def allow_bots(text, user):
     return not re.search(r'\{\{(nobots|bots\|(allow=none|deny=.*?' + user + r'.*?|optout=all|deny=all))\}\}', text, flags=re.IGNORECASE)
 
 def save(title, text):
-	mwhair.save(title,text=text,summary='Removing invalid section link(s)',minor=True)
+	mwhair.save(title,text=text,summary='Removing incorrect section link(s)',minor=True)
 
 def main():
 	pages = get_pages()
