@@ -93,7 +93,7 @@ def allow_bots(text, user):
     return not re.search(r'\{\{(nobots|bots\|(allow=none|deny=.*?' + user + r'.*?|optout=all|deny=all))\}\}', text, flags=re.IGNORECASE)
 
 def save(title, text):
-	mwhair.save(title,text=text,summary='Removing incorrect section link(s)',minor=True)
+	mwhair.save(title,text=text,summary='Removing invalid section link(s)',minor=True)
 
 def main():
 	pages = get_pages()
