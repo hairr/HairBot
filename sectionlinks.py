@@ -34,15 +34,10 @@ def find_links(text):
 	return links
 
 def page_name(link):
-	pattern = re.compile(r'\[\[(.*?)(#.*?)?(\|.*?)?\]\]')
-	page_link = pattern.findall(link)
-	return page_link[0][0]
+	return str(mw.parse(link).filter_links()[0].title).split('#')[0]
 
 def section_link(link):
-	pattern = re.compile(r'\[\[.*#(.*?)(\|.*?)?\]\]')
-	string = pattern.findall(link.encode('ascii','ignore'))
-	if string != []:
-		return string[0][0]
+	return str(mw.parse(link).filter_links()[0].title).split('#')[0]
 
 def matched(section,headers):
 	count, total = 0, len(headers)
