@@ -54,9 +54,9 @@ def matched(section,headers):
 def replace_link(section, link, headers):
 	for header in headers:
 		if re.search(section, header, flags=re.IGNORECASE):
-			return re.sub(section, header, link.encode('ascii','ignore'))
+			return re.sub(section, header, str(link))
 		else:
-			return re.sub('#' + section,'',link.encode('ascii','ignore'))
+			return re.sub('#' + section,'',str(link))
 
 def filter_headers(title):
 	title2 = page_name(title)
