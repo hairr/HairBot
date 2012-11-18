@@ -62,13 +62,11 @@ def replace_link(section, link, headers):
 			return re.sub('#' + section,'',link.encode('ascii','ignore'))
 
 def filter_headers(title):
-	pattern = re.compile(r'\[\[(.*?)(#.*?)?(\|.*?)?\]\]')
-	title2 = pattern.findall('%s' % title)[0][0]
+	title2 = str(mw.parse(title).filter_links()[0].title).split('#')[0]
 	text, sections = get_contents(title2), []
 	beautiful_text = BS(text)
 	if beautiful_text.nowiki is not None:
 		for nowiki in beautiful_text.findAll('nowiki'):
-			print nowiki.contents[0]
 			text = re.sub(str(nowiki.contents[0]),'',text)
 	if beautiful_text.pre is not None:
 		for pre in beautiful_text.findAll('pre'):
