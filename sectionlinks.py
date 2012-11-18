@@ -67,11 +67,15 @@ def filter_headers(title):
 	text, sections = get_contents(title2), []
 	beautiful_text = BS(text)
 	if beautiful_text.nowiki is not None:
-		text = re.sub(beautiful_text.nowiki.string,'',text)
+		for nowiki in beautiful_text.findAll('nowiki'):
+			print nowiki.contents[0]
+			text = re.sub(str(nowiki.contents[0]),'',text)
 	if beautiful_text.pre is not None:
-		text = re.sub(filtered_text.pre.string,'',text)
+		for pre in beautiful_text.findAll('pre'):
+			text = re.sub(str(pre.contents[0]),'',text)
 	if beautiful_text.source is not None:
-		text = re.sub(filtered_text.source.string,'',text)
+		for source in beautiful_text.findAll('source'):
+			text = re.sub(str(source.contents[0]),'',text)
 	new_text = BS(text)
 	for tag in new_text.findAll(True,{'id':True}):
 		sections.append(tag['id'])
