@@ -37,7 +37,7 @@ def page_name(link):
 	return str(mw.parse(link).filter_links()[0].title).split('#')[0]
 
 def section_link(link):
-	return str(mw.parse(link).filter_links()[0].title).split('#')[0]
+	return str(mw.parse(link).filter_links()[0].title).split('#')[1]
 
 def matched(section,headers):
 	count, total = 0, len(headers)
