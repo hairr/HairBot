@@ -23,6 +23,7 @@ import mwhair
 import mwparserfromhell as mw
 import re
 import sqlite3 as lite
+from BeautifulSoup import BeautifulSoup as BS
 
 def get_pages():
 	return mwhair.allpages(limit='max',namespace=0)
@@ -64,10 +65,16 @@ def filter_headers(title):
 	pattern = re.compile(r'\[\[(.*?)(#.*?)?(\|.*?)?\]\]')
 	title2 = pattern.findall('%s' % title)[0][0]
 	text, sections = get_contents(title2), []
-	pattern = re.compile(r'<.*?[^>]+?id="([^"]+)".*?<\/.*?>')
-	header_ids = pattern.findall(text)
-	for header_id in header_ids:
-		sections.append(header_id)
+	beautiful_text = BS(text)
+	if beautiful_text.nowiki is not None:
+		text = re.sub(beautiful_text.nowiki.string,'',text)
+	if beautiful_text.pre is not None:
+		text = re.sub(filtered_text.pre.string,'',text)
+	if beautiful_text.source is not None:
+		text = re.sub(filtered_text.source.string,'',text)
+	new_text = BS(text)
+	for tag in new_text.findAll(True,{'id':True}):
+		sections.append(tag['id'])
 	for line in text.split('\n'):
 		if line.startswith('==') and not line.startswith('===='):
 			sections.append(re.sub(r'==(=)? ?(?P<header>.*?) ?==(=)?',r'\g<header>',line))
