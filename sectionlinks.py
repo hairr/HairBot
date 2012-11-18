@@ -23,6 +23,7 @@ import mwhair
 import mwparserfromhell as mw
 import re
 import sqlite3 as lite
+import time
 from BeautifulSoup import BeautifulSoup as BS
 
 def get_pages():
@@ -100,6 +101,7 @@ def main():
 	pages = get_pages()
 	for page in pages:
 		text = get_contents(page)
+		time.sleep(1)
 		links = find_links(text)
 		amount, count = len(links), 0
 		for link in links:
@@ -114,6 +116,7 @@ def main():
 			if count == amount and allow_bots(text, 'HairBot'):
 				try:
 					save(page,new_text)
+					time.sleep(2)
 					del new_text
 				except:
 					pass
