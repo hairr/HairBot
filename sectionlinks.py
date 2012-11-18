@@ -24,7 +24,7 @@ import mwparserfromhell as mw
 import re
 import sqlite3 as lite
 import time
-from BeautifulSoup import BeautifulSoup as BS
+from bs4 import BeautifulSoup as BS
 
 def get_pages():
 	return mwhair.allpages(limit='max',namespace=0)
